@@ -12,6 +12,8 @@ router.route('/:id')
     .get(packets.findOne)
     .put(packets.update)
     .delete(packets.delete)
-
+    
+router.route('/search/:name')
+    .get(packets.search)
 
 module.exports = router;

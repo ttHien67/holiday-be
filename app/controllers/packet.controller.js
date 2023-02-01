@@ -25,6 +25,18 @@ exports.findAll = async (_req, res, next) => {
     return res.send(documents);
 };
 
+exports.search = async (req, res, next) => {
+    try{
+        const packetService = new PacketService(MongoDB.client);
+        documents = await packetService.find({title: req.params.name});
+    }catch(error){
+        return next(
+            new ApiError(500, 'An error occurred while retrieving packets')
+        );
+    }
+
+    return res.send(documents);
+};
 exports.findOne = async (req, res, next) => {
     try{
         const packetService = new PacketService(MongoDB.client);
