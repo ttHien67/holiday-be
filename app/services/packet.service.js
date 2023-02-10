@@ -2,18 +2,18 @@ const {Object, ObjectId} = require('mongodb');
 
 class PacketService {
     constructor(client) {
-        this.Packet = client.db().collection('packages');
+        this.Packet = client.db().collection('packets');
     }
 
 
     // dinh nghia cac phuong thuc truy xuat CSDL su dung mongodb API
     extractPacketData(payload) {
         const packet = {
-            title: payload.title,
+            img: payload.img,
             logo: payload.logo,
+            title: payload.title,
             location: payload.location,
             type: payload.type,
-            img: payload.img,
             newPrice: payload.newPrice,
             oldPrice: payload.oldPrice,
             colorBtn: payload.colorBtn,
@@ -26,13 +26,7 @@ class PacketService {
 
     async create(payload) {
         const packet = this.extractPacketData(payload);
-        const result = await  this.Packet.findOneAndUpdate(
-            packet,
-            { $set: this.packet = packet },
-            { returnDocument: 'after', upset: true}
-        );
-
-        return result.value;
+        await this.Packet.insertOne(packet);
     }
 
     async find(filter) {

@@ -5,11 +5,12 @@ const MongoDB = require('../utils/mongodb.util');
 exports.create = async (req, res, next) => {
     try {
         const packetService = new PacketService(MongoDB.client);
-        const document = await packetService.create(req.body);
-        return res.send(document);
+        
+        await packetService.create(req.body);
     }catch(error){
         return next(new ApiError(500, 'An error occurred while creating the packet'));
     }
+    return res.send({message: 'Packet has been created'})
 }
 
 exports.findAll = async (_req, res, next) => {
