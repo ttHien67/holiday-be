@@ -29,7 +29,10 @@ exports.findAll = async (_req, res, next) => {
 exports.search = async (req, res, next) => {
     try{
         const packetService = new PacketService(MongoDB.client);
-        documents = await packetService.find({title: req.params.name});
+        documents = await packetService.find({$or: [
+            {title: { $regex: req.params.name }}, 
+            {newPrice: {$lt: Number(req.params.name)}}
+        ]});
     }catch(error){
         return next(
             new ApiError(500, 'An error occurred while retrieving packets')
