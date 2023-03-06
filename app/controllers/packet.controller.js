@@ -16,30 +16,38 @@ exports.create = async (req, res, next) => {
 exports.findAll = async (_req, res, next) => {
     try{
         const packetService = new PacketService(MongoDB.client);
-        documents = await packetService.find({});
+        const documents = await packetService.find({});
+
+        if(!documents){
+            return next(new ApiError(404, "Packet not found"))
+        }
+
+        return res.send(documents);
     }catch(error){
         return next(
             new ApiError(500, 'An error occurred while retrieving packets')
         );
     }
 
-    return res.send(documents);
 };
 
 exports.search = async (req, res, next) => {
     try{
         const packetService = new PacketService(MongoDB.client);
-        documents = await packetService.find({$or: [
+        const documents = await packetService.find({$or: [
             {title: { $regex: req.params.name }}, 
             {newPrice: {$lt: Number(req.params.name)}}
         ]});
+
+        if(!documents){
+            return next(new ApiError(404, "Packet not found"))
+        }
     }catch(error){
         return next(
             new ApiError(500, 'An error occurred while retrieving packets')
         );
     }
 
-    return res.send(documents);
 };
 exports.findOne = async (req, res, next) => {
     try{
