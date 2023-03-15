@@ -1,3 +1,5 @@
+const { ObjectId } = require('mongodb');
+
 class AccountService {
     constructor(client) {
         this.Account = client.db().collection('account');
@@ -25,6 +27,12 @@ class AccountService {
     async find(filter) {
         const cursor = await this.Account.find(filter);
         return await cursor.toArray();
+    }
+
+    async findById(id) {
+        return await this.Account.findOne({
+            _id: ObjectId.isValid(id) ? new ObjectId(id) : null,
+        });
     }
 }
 

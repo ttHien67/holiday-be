@@ -42,6 +42,7 @@ exports.search = async (req, res, next) => {
         if(!documents){
             return next(new ApiError(404, "Packet not found"))
         }
+        return res.send(documents);
     }catch(error){
         return next(
             new ApiError(500, 'An error occurred while retrieving packets')
