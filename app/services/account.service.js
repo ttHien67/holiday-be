@@ -12,6 +12,7 @@ class AccountService {
             email: payload.email,
             address: payload.address,
             password: payload.password,
+            packetID: payload.packetID,
             date: payload.date
         };
 
@@ -33,6 +34,20 @@ class AccountService {
         return await this.Account.findOne({
             _id: ObjectId.isValid(id) ? new ObjectId(id) : null,
         });
+    }
+
+    async update(id, payload){
+        const filter = {
+            _id: ObjectId.isValid(id)? new ObjectId(id) : null,
+        };
+
+        const result = await this.Account.updateOne(
+            filter,
+            { $addToSet: payload},
+            { upsert: true}
+        );
+
+        return result;
     }
 }
 

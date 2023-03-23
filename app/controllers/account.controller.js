@@ -39,15 +39,9 @@ exports.login = async (req, res, next) => {
         ]});
 
         // convert array to string
-        const isEmpty = documents.toString();
+        const isHasAccount = documents.toString();
 
-        if(!isEmpty) {
-            return res.send({
-                message: 'Account has not been existed', 
-                username: documents[0]?.username
-            })
-        }else {
-
+        if(isHasAccount) {
             // create jwt token
             const token = jwt.sign({
                 userId: documents[0]._id,
@@ -59,6 +53,11 @@ exports.login = async (req, res, next) => {
                 username: documents[0].username,
                 token
             }); 
+        }else {
+            return res.send({
+                message: 'Account has not been existed', 
+                username: documents[0]?.username
+            })
         }
     }catch(error){
         return next(new ApiError(500, 'An error occurred while creating the account'));
@@ -80,3 +79,26 @@ exports.findOne = async (req, res, next) => {
             new ApiError(500, `Error retrieving account with id=${req.params.id}`));
     }
 };
+
+exports.update = async (req, res, next) => {
+    try{
+        const accountService = new AccountService(MongoDB.client);
+        // check exist id of packet
+        if(req.body.packetID) {
+            const document = await accountService.update(req.params.id, req.body);
+
+            if(!document){
+                return next(new ApiError(404, 'Account not found'));
+            }
+    
+            return res.send({message: 'Account was updated successfully'});
+        }
+
+    }catch(error){
+        return next(
+            new ApiError(500, `Error updating account with id=${req.params.id}`)
+        );
+    }
+};
+
+

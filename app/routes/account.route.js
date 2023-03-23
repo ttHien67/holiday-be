@@ -11,6 +11,7 @@ router.route('/login')
 
 router.route('/user/:id')
     .get(account.findOne)
+    .patch(account.update)
 
 
 module.exports = router;
