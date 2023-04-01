@@ -19,6 +19,9 @@ class PacketDeletedService {
             colorBtn: payload.colorBtn,
             colorIcon: payload.colorIcon,
             description: payload.description,
+            quantityTicket: payload.quantityTicket,
+            departureTime: payload.departureTime,
+            endTime: payload.endTime
         };
 
         return packetDeleted;
